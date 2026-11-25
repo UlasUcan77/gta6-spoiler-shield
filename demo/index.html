@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spoiler Shield — Live Demo</title>
+  <meta name="description" content="Try the spoiler blocker live: a fake social feed where the shield blurs or hides the spoilers as they appear.">
+  <link rel="icon" href="../icons/icon32.png">
+  <link rel="stylesheet" href="../src/content.css">
+  <style>
+    :root {
+      --bg: #0d0b1a; --panel: #16132a; --line: rgba(255,255,255,.09);
+      --text: #f4f2ff; --muted: #a3a0bd; --pink: #ec4899; --violet: #8b5cf6; --cyan: #22d3ee;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background-image:
+        radial-gradient(900px 500px at 0% 0%, rgba(236,72,153,.16), transparent 60%),
+        radial-gradient(800px 500px at 100% 30%, rgba(34,211,238,.10), transparent 60%);
+      background-attachment: fixed;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
+    .hero { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+    .hero img { width: 64px; height: 64px; border-radius: 16px; }
+    .hero h1 { margin: 0; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.02em; }
+    .hero p { margin: 2px 0 0; color: var(--muted); }
+    .lead { color: var(--muted); max-width: 720px; }
+    code { background: rgba(236,72,153,.14); color: #f9a8d4; padding: 1px 6px; border-radius: 6px; font-size: .9em; }
+
+    .controls {
+      position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 12px; margin: 20px 0; border-radius: 14px; background: rgba(22,19,42,.85);
+      border: 1px solid var(--line); backdrop-filter: blur(10px);
+    }
+    .controls button {
+      all: unset; cursor: pointer; padding: 8px 12px; border-radius: 10px; font-weight: 600; font-size: 13.5px;
+      background: rgba(255,255,255,.07); border: 1px solid var(--line);
+    }
+    .controls button:hover { background: rgba(255,255,255,.12); }
+    .controls button.on { background: linear-gradient(135deg, var(--pink), var(--violet)); border-color: transparent; }
+    .controls .count { margin-left: auto; color: var(--muted); font-size: 13px; }
+    .controls .count strong { color: var(--text); font-size: 18px; }
+
+    h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 32px 0 12px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+    .video { border-radius: 14px; }
+    .thumb { aspect-ratio: 16/9; border-radius: 12px; position: relative; overflow: hidden; }
+    .thumb span { position: absolute; right: 8px; bottom: 8px; background: rgba(0,0,0,.75); font-size: 12px; padding: 1px 6px; border-radius: 5px; }
+    .video h3 { font-size: 15px; margin: 10px 0 2px; line-height: 1.3; }
+    .video .meta { color: var(--muted); font-size: 13px; }
+    .t1 { background: linear-gradient(135deg,#f472b6,#7c3aed); }
+    .t2 { background: linear-gradient(135deg,#0ea5e9,#22c55e); }
+    .t3 { background: linear-gradient(135deg,#f59e0b,#ef4444); }
+    .t4 { background: linear-gradient(135deg,#6366f1,#06b6d4); }
+    .t5 { background: linear-gradient(135deg,#a3e635,#14b8a6); }
+    .t6 { background: linear-gradient(135deg,#fb7185,#fbbf24); }
+
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+    .feed { display: grid; gap: 12px; }
+    .post { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+    .post header { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+    .post .name { font-weight: 700; }
+    .post .handle { color: var(--muted); font-size: 13px; }
+    .post p { margin: 0; }
+    .post .stats { color: var(--muted); font-size: 13px; margin-top: 8px; }
+    .reddit .sub { color: var(--muted); font-size: 12.5px; }
+    .reddit h3 { margin: 4px 0; font-size: 16px; }
+
+    .article { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+    .article p { color: #d4d1ea; }
+    footer { margin-top: 48px; color: var(--muted); font-size: 13px; }
+    footer a { color: var(--cyan); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <img src="../icons/icon128.png" alt="">
+      <div>
+        <h1>Spoiler Shield · Live demo</h1>
+        <p>A fake feed. The real extension does this on YouTube, X, Reddit, TikTok, Google and every other site.</p>
+      </div>
+    </div>
+    <p class="lead">
+      Everything that mentions <code>GTA 6</code>, <code>GTA VI</code>, <code>#GTA6</code>,
+      <code>Grand Theft Auto VI</code> or (with deep spoilers on) the game's characters and places is blurred.
+      Click a blurred card to reveal it. Use the buttons to switch modes, add new posts live, or open an
+      entire "spoiler page".
+    </p>
+
+    <div class="controls" id="controls">
+      <button id="btn-toggle" class="on">Shield: ON</button>
+      <button id="btn-blur" class="on">Blur</button>
+      <button id="btn-hide">Hide</button>
+      <button id="btn-deep" class="on">Deep spoilers: ON</button>
+      <button id="btn-add">+ Add a live post</button>
+      <button id="btn-page">Open a spoiler page</button>
+      <span class="count"><strong id="count">0</strong> blocked</span>
+    </div>
+
+    <h2>Video feed</h2>
+    <div class="grid" id="videos">
+      <div class="video yt-card">
+        <div class="thumb t1"><span>14:02</span></div>
+        <h3>GTA 6 ENDING EXPLAINED (full story spoilers)</h3>
+        <div class="meta">PixelLore · 2.1M views · 3 hours ago</div>
+      </div>
+      <div class="video yt-card">
+        <div class="thumb t2"><span>8:45</span></div>
+        <h3>I built a working calculator in Minecraft</h3>
+        <div class="meta">RedstoneRob · 410K views · 1 day ago</div>
+      </div>
+      <div class="video yt-card">
+        <div class="thumb t3"><span>22:10</span></div>
+        <h3>Every secret in Leonida you probably missed</h3>
+        <div class="meta">MapNerd · 880K views · 6 hours ago</div>
+      </div>
+      <div class="video yt-card">
+        <div class="thumb t4"><span>11:31</span></div>
+        <h3>Lo-fi beats to code a Chrome extension to</h3>
+        <div class="meta">ChillDev · 3.3M views · 2 weeks ago</div>
+      </div>
+      <div class="video yt-card">
+        <div class="thumb t5" aria-label="Grand Theft Auto VI boss fight thumbnail"><span>5:59</span></div>
+        <h3>This boss fight is INSANE 😱</h3>
+        <div class="meta">Thumbnail text is checked too (aria-label / alt)</div>
+      </div>
+      <div class="video yt-card">
+        <div class="thumb t6"><span>18:20</span></div>
+        <h3>GTA V vs GTA IV: which story holds up?</h3>
+        <div class="meta">Older games are left alone · 120K views</div>
+      </div>
+    </div>
+
+    <div class="cols">
+      <section>
+        <h2>Social posts</h2>
+        <div class="feed" id="tweets">
+          <article class="post">
+            <header><div class="avatar t1"></div><div><div class="name">leakhunter</div><div class="handle">@leakhunter · 2m</div></div></header>
+            <p>NO WAY Lucia Caminos does THAT in the final mission 😭 #GTA6</p>
+            <div class="stats">💬 1.2K · 🔁 8.4K · ❤️ 41K</div>
+          </article>
+          <article class="post">
+            <header><div class="avatar t2"></div><div><div class="name">Ada</div><div class="handle">@ada_codes · 5m</div></div></header>
+            <p>Shipped my first Chrome extension today. Manifest V3 is actually nice once you get it.</p>
+            <div class="stats">💬 12 · 🔁 30 · ❤️ 410</div>
+          </article>
+          <article class="post">
+            <header><div class="avatar t3"></div><div><div class="name">gamer_tr</div><div class="handle">@gamer_tr · 9m</div></div></header>
+            <p>GTA VI'ın sonunu kimse beklemiyordu, Jason resmen…</p>
+            <div class="stats">💬 300 · 🔁 1.1K · ❤️ 9K</div>
+          </article>
+        </div>
+      </section>
+      <section>
+        <h2>Forum threads</h2>
+        <div class="feed" id="reddit">
+          <article class="post reddit">
+            <div class="sub">r/gaming · Posted by u/vc_veteran</div>
+            <h3>Vice City in the new game vs the 2002 original — a full map comparison</h3>
+            <div class="stats">⬆ 12.4k · 💬 1.9k comments</div>
+          </article>
+          <article class="post reddit">
+            <div class="sub">r/webdev · Posted by u/mut_observer</div>
+            <h3>TIL MutationObserver callbacks run before the browser paints</h3>
+            <div class="stats">⬆ 2.1k · 💬 140 comments</div>
+          </article>
+          <article class="post reddit">
+            <div class="sub">r/games · Posted by u/thesixth</div>
+            <h3>[Megathread] Grand-Theft-Auto-VI launch day — post your thoughts</h3>
+            <div class="stats">⬆ 48.0k · 💬 22k comments</div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <h2>A news article</h2>
+    <div class="article">
+      <p>The holiday season was packed with big releases. Indie hits dominated the charts in the first week,
+        while two long-awaited remasters finally got release dates.</p>
+      <p>Meanwhile, early players say the twist involving Jason Duval in the third act is the most talked-about
+        moment of the year — and they are posting about it everywhere.</p>
+      <p>Hardware sales also jumped, with retailers reporting record numbers for consoles and handheld PCs.</p>
+    </div>
+
+    <footer>
+      Install the extension from the <a href="https://github.com/UlasUcan77/gta6-spoiler-shield">GitHub repository</a>.
+      This demo runs the exact same <code>content.js</code> the extension injects.
+      Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive.
+    </footer>
+  </div>
+
+  <script>
+    window.GVS_DEMO_SETTINGS = { enabled: true, mode: 'blur', deepSpoilers: true, pageShield: true, customKeywords: [], allowlist: [], pausedUntil: 0 };
+  </script>
+  <script src="../src/matcher.js"></script>
+  <script src="../src/content.js"></script>
+  <script>
+    (() => {
+      const s = { ...window.GVS_DEMO_SETTINGS };
+      const $ = (id) => document.getElementById(id);
+      const sync = () => {
+        $('btn-toggle').textContent = 'Shield: ' + (s.enabled ? 'ON' : 'OFF');
+        $('btn-toggle').classList.toggle('on', s.enabled);
+        $('btn-blur').classList.toggle('on', s.mode === 'blur');
+        $('btn-hide').classList.toggle('on', s.mode === 'hide');
+        $('btn-deep').textContent = 'Deep spoilers: ' + (s.deepSpoilers ? 'ON' : 'OFF');
+        $('btn-deep').classList.toggle('on', s.deepSpoilers);
+      };
+      const apply = (patch) => { Object.assign(s, patch); window.__gvs.update(patch); sync(); };
+      $('btn-toggle').onclick = () => apply({ enabled: !s.enabled });
+      $('btn-blur').onclick = () => apply({ mode: 'blur' });
+      $('btn-hide').onclick = () => apply({ mode: 'hide' });
+      $('btn-deep').onclick = () => apply({ deepSpoilers: !s.deepSpoilers });
+
+      const samples = [
+        ['spoilerbot', 'BREAKING: full GTA VI story leaked, thread below 🧵'],
+        ['cat_facts', 'Cats sleep for about 13 to 16 hours a day.'],
+        ['vc_fan', 'Driving through Port Gellhorn at sunset hits different'],
+        ['dev_daily', 'Reminder: debounce your MutationObserver work.'],
+        ['tr_oyuncu', 'gta6 bitirdim, sona kadar spoiler vermeyeceğim söz'],
+      ];
+      let i = 0;
+      $('btn-add').onclick = () => {
+        const [name, text] = samples[i++ % samples.length];
+        const a = document.createElement('article');
+        a.className = 'post';
+        a.innerHTML = '<header><div class="avatar t' + (1 + (i % 6)) + '"></div><div><div class="name"></div><div class="handle">just now</div></div></header><p></p><div class="stats">💬 0 · 🔁 0 · ❤️ 0</div>';
+        a.querySelector('.name').textContent = name;
+        a.querySelector('p').textContent = text;
+        $('tweets').prepend(a);
+      };
+
+      const originalTitle = document.title;
+      $('btn-page').onclick = () => {
+        // Simulates navigating (SPA-style) to a page whose title is about the game.
+        document.title = 'GTA 6 – Full walkthrough and ending';
+        history.pushState({}, '', '#spoiler-page');
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      };
+      // "Get me out of here" goes back in history: restore the normal title.
+      window.addEventListener('popstate', () => {
+        if (location.hash !== '#spoiler-page') document.title = originalTitle;
+      });
+
+      setInterval(() => { $('count').textContent = window.__gvs.count; }, 300);
+      sync();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GTA VI Spoiler Shield</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="popup">
+    <header class="head">
+      <img class="logo" src="../icons/icon48.png" alt="" width="36" height="36">
+      <div class="title">
+        <h1 data-i18n="extName">GTA VI Spoiler Shield</h1>
+        <p data-i18n="popupTagline">Play it fresh. No spoilers.</p>
+      </div>
+      <label class="switch" title="Alt+Shift+G">
+        <input type="checkbox" id="enabled" checked>
+        <span class="track"><span class="thumb"></span></span>
+      </label>
+    </header>
+
+    <section class="status" id="status-card">
+      <div class="status-line">
+        <span class="dot" id="status-dot"></span>
+        <span id="status-text" data-i18n="popupShieldOn">Shield is on</span>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <strong id="page-count">–</strong>
+          <span data-i18n="popupThisPage">on this page</span>
+        </div>
+        <div class="stat">
+          <strong id="total-count">0</strong>
+          <span data-i18n="popupAllTime">blocked all-time</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="label" data-i18n="popupMode">When spoilers are found</div>
+      <div class="segmented" role="radiogroup">
+        <button type="button" role="radio" data-mode="blur" data-i18n="popupModeBlur">Blur</button>
+        <button type="button" role="radio" data-mode="hide" data-i18n="popupModeHide">Hide</button>
+      </div>
+    </section>
+
+    <section class="group toggles">
+      <label class="row">
+        <span>
+          <span class="row-title" data-i18n="popupDeep">Deep spoilers</span>
+          <span class="row-hint" data-i18n="popupDeepHint">Also block characters, cities and places from the game</span>
+        </span>
+        <input type="checkbox" id="deepSpoilers" class="mini">
+      </label>
+      <label class="row">
+        <span>
+          <span class="row-title" data-i18n="popupPageShield">Full-page warning</span>
+          <span class="row-hint" data-i18n="popupPageShieldHint">Cover whole pages and videos that are about GTA VI</span>
+        </span>
+        <input type="checkbox" id="pageShield" class="mini">
+      </label>
+    </section>
+
+    <details class="group keywords">
+      <summary data-i18n="popupKeywords">Your own keywords</summary>
+      <textarea id="customKeywords" rows="4" spellcheck="false" placeholder="Vice City Stories&#10;#GTA6Leaks"></textarea>
+      <div class="kw-foot">
+        <span class="row-hint" data-i18n="popupKeywordsHint">One per line.</span>
+        <button type="button" id="save-keywords" class="btn small" data-i18n="popupSave">Save</button>
+      </div>
+    </details>
+
+    <section class="actions">
+      <button type="button" id="pause" class="btn" data-i18n="popupPause">Pause 1 hour</button>
+      <button type="button" id="allow-site" class="btn" data-i18n="popupAllowSite">Allow this site</button>
+      <button type="button" id="reveal-all" class="btn ghost wide" data-i18n="popupRevealAll">Reveal all on this page</button>
+    </section>
+
+    <footer class="foot">
+      <span data-i18n="popupShortcut">Shortcut: Alt+Shift+G</span>
+      <a href="https://github.com/UlasUcan77/gta6-spoiler-shield" target="_blank" rel="noopener">GitHub</a>
+    </footer>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

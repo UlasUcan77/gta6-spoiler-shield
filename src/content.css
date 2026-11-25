@@ -1,0 +1,179 @@
+/* GTA VI Spoiler Shield — injected styles. Everything is prefixed with gvs- to avoid clashes. */
+
+/* ---------- card blocks: blur the children, draw a label on top ---------- */
+.gvs-rel.gvs-blocked:not(.gvs-revealed) {
+  position: relative !important;
+}
+
+/* Keep the blur from bleeding outside the card. */
+.gvs-card.gvs-blocked:not(.gvs-revealed) {
+  overflow: hidden !important;
+  border-radius: 12px;
+}
+
+.gvs-card.gvs-blocked:not(.gvs-revealed) > * {
+  filter: blur(18px) saturate(0.4) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.gvs-card.gvs-blocked:not(.gvs-revealed)::after {
+  content: attr(data-gvs-label) !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2147483000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 14px !important;
+  box-sizing: border-box !important;
+  border-radius: 12px !important;
+  background:
+    linear-gradient(135deg, rgba(236, 72, 153, 0.22), rgba(34, 211, 238, 0.18)),
+    rgba(14, 12, 28, 0.62) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #fff !important;
+  font: 600 13px/1.35 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif !important;
+  letter-spacing: 0.01em !important;
+  text-align: center !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+/* ---------- inline blocks (a paragraph, a heading, a link) ---------- */
+.gvs-inline.gvs-blocked:not(.gvs-revealed) {
+  filter: blur(7px) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: filter 0.2s ease !important;
+}
+
+.gvs-inline.gvs-blocked:not(.gvs-revealed) * {
+  pointer-events: none !important;
+}
+
+/* ---------- hide mode ---------- */
+.gvs-hide-mode .gvs-blocked:not(.gvs-revealed) {
+  display: none !important;
+}
+
+/* ---------- full page shield ---------- */
+html.gvs-page-locked,
+html.gvs-page-locked body {
+  overflow: hidden !important;
+}
+
+#gvs-page-shield {
+  all: initial;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  background:
+    radial-gradient(1200px 600px at 15% 10%, rgba(236, 72, 153, 0.28), transparent 60%),
+    radial-gradient(900px 500px at 90% 90%, rgba(34, 211, 238, 0.22), transparent 60%),
+    rgba(10, 8, 22, 0.94) !important;
+  backdrop-filter: blur(24px) !important;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif !important;
+  color: #f5f3ff !important;
+}
+
+/* Reset everything inside the shield so page styles (h2 { text-transform… }) can't leak in. */
+#gvs-page-shield *,
+#gvs-page-shield *::before,
+#gvs-page-shield *::after {
+  all: unset;
+  box-sizing: border-box;
+}
+
+#gvs-page-shield .gvs-ps-card {
+  display: block;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  padding: 32px 28px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+#gvs-page-shield .gvs-ps-icon {
+  display: block;
+  font-size: 44px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+#gvs-page-shield h2 {
+  display: block;
+  margin: 0 0 8px;
+  font: 800 24px/1.2 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+#gvs-page-shield p {
+  display: block;
+  margin: 0 0 14px;
+  font: 400 15px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #cbd5e1;
+}
+
+#gvs-page-shield code {
+  display: inline-block;
+  margin-bottom: 22px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(236, 72, 153, 0.16);
+  color: #f9a8d4;
+  font: 500 12px/1.4 ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+#gvs-page-shield .gvs-ps-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+#gvs-page-shield button {
+  display: inline-block;
+  cursor: pointer;
+  padding: 11px 18px;
+  border-radius: 12px;
+  font: 600 14px/1 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+
+#gvs-page-shield button:active {
+  transform: scale(0.97);
+}
+
+#gvs-page-shield button:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 2px;
+}
+
+#gvs-page-shield .gvs-ps-primary {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: #fff;
+}
+
+#gvs-page-shield .gvs-ps-ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+}
+
+#gvs-page-shield .gvs-ps-ghost:hover {
+  background: rgba(255, 255, 255, 0.14);
+}

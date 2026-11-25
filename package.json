@@ -1,0 +1,16 @@
+{
+  "name": "gta6-spoiler-shield",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension that blurs or hides GTA VI spoilers across the web.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/matcher.test.js",
+    "test:e2e": "node tests/e2e.mjs",
+    "build": "python scripts/build.py",
+    "icons": "python scripts/make_icons.py"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.10.0"
+  }
+}
