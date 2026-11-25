@@ -39,7 +39,8 @@ const browser = await puppeteer.launch({
   headless: true,
   pipe: true,
   enableExtensions: [ROOT],
-  args: ['--no-first-run', '--lang=en-US'],
+  // Ubuntu 24.04 runners block Chrome's user-namespace sandbox, so CI runs without it.
+  args: ['--no-first-run', '--lang=en-US', ...(process.env.CI ? ['--no-sandbox', '--disable-setuid-sandbox'] : [])],
 });
 
 let failures = 0;
